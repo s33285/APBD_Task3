@@ -150,22 +150,17 @@ public sealed class LinqExercises
             });
     }
 
-    /// <summary>
-    /// Challenge:
-    /// Find students who have more than one active enrollment.
-    /// Return the full name and the number of active courses.
-    ///
-    /// SQL:
-    /// SELECT s.FirstName, s.LastName, COUNT(*)
-    /// FROM Students s
-    /// JOIN Enrollments e ON s.Id = e.StudentId
-    /// WHERE e.IsActive = 1
-    /// GROUP BY s.FirstName, s.LastName
-    /// HAVING COUNT(*) > 1;
-    /// </summary>
     public IEnumerable<string> Challenge01_StudentsWithMoreThanOneActiveCourse()
     {
-        throw NotImplemented(nameof(Challenge01_StudentsWithMoreThanOneActiveCourse));
+        return UniversityData.Enrollments.Where(e => e.IsActive)
+            .GroupBy(e => e.StudentId)
+            .Where(g => g.Count() > 1)
+            .Select(g =>
+            {
+                var student = UniversityData.Students.First(s => s.Id == g.Key);
+                var name = student is null ? $"Student: {g.Key}" : $"{student.FirstName} {student.LastName}";
+                return $"{name} | {g.Count()}";
+            });
     }
 
     /// <summary>
