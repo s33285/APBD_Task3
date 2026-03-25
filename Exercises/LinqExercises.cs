@@ -118,18 +118,6 @@ public sealed class LinqExercises
             });
     }
 
-    /// <summary>
-    /// Task:
-    /// Calculate the average final grade for each course.
-    /// Ignore records where the final grade is null.
-    ///
-    /// SQL:
-    /// SELECT c.Title, AVG(e.FinalGrade)
-    /// FROM Enrollments e
-    /// JOIN Courses c ON c.Id = e.CourseId
-    /// WHERE e.FinalGrade IS NOT NULL
-    /// GROUP BY c.Title;
-    /// </summary>
     public IEnumerable<string> Task14_AverageGradePerCourse()
     {
         return UniversityData.Enrollments
@@ -141,23 +129,15 @@ public sealed class LinqExercises
                 return $"{course.Title} | {g.Average(e => e.FinalGrade!.Value):F2}";
             });
     }
-
     
-
-    /// <summary>
-    /// Task:
-    /// For each lecturer, count how many courses are assigned to that lecturer.
-    /// Return the full lecturer name and the course count.
-    ///
-    /// SQL:
-    /// SELECT l.FirstName, l.LastName, COUNT(c.Id)
-    /// FROM Lecturers l
-    /// LEFT JOIN Courses c ON c.LecturerId = l.Id
-    /// GROUP BY l.FirstName, l.LastName;
-    /// </summary>
     public IEnumerable<string> Task15_LecturersAndCourseCounts()
     {
-        throw NotImplemented(nameof(Task15_LecturersAndCourseCounts));
+        return UniversityData.Lecturers.Select(les =>
+        {
+
+            var count = UniversityData.Courses.Count(c => c.LecturerId == les.Id);
+            return $"{les.FirstName} {les.LastName} | {count}";
+        });
     }
 
     /// <summary>
