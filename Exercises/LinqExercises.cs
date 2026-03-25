@@ -76,20 +76,11 @@ public sealed class LinqExercises
         return UniversityData.Students
             .Select(s => s.City).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(c => c);
     }
-
-    /// <summary>
-    /// Task:
-    /// Return the three newest enrollments.
-    /// Show the enrollment date, student identifier, and course identifier.
-    ///
-    /// SQL:
-    /// SELECT TOP 3 EnrollmentDate, StudentId, CourseId
-    /// FROM Enrollments
-    /// ORDER BY EnrollmentDate DESC;
-    /// </summary>
+    
     public IEnumerable<string> Task09_ThreeNewestEnrollments()
     {
-        throw NotImplemented(nameof(Task09_ThreeNewestEnrollments));
+        return UniversityData.Enrollments.OrderByDescending(e => e.EnrollmentDate).Take(3)
+            .Select(e => $"{e.EnrollmentDate} | student: {e.StudentId} | course: {e.CourseId}");
     }
 
     /// <summary>
