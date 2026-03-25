@@ -52,16 +52,7 @@ public sealed class LinqExercises
             assignedDep.ToString()
         };
     }
-
-    /// <summary>
-    /// Task:
-    /// Count how many active enrollments exist in the system.
-    ///
-    /// SQL:
-    /// SELECT COUNT(*)
-    /// FROM Enrollments
-    /// WHERE IsActive = 1;
-    /// </summary>
+    
     public IEnumerable<string> Task07_CountActiveEnrollments()
     {
         var count = UniversityData.Enrollments.Count(e => e.IsActive);
@@ -195,20 +186,7 @@ public sealed class LinqExercises
             return $"{les.FirstName} {les.LastName}";
         });
     }
-
-    /// <summary>
-    /// Challenge:
-    /// Show student cities and the number of active enrollments created by students from each city.
-    /// Sort the result by the active enrollment count in descending order.
-    ///
-    /// SQL:
-    /// SELECT s.City, COUNT(*)
-    /// FROM Students s
-    /// JOIN Enrollments e ON s.Id = e.StudentId
-    /// WHERE e.IsActive = 1
-    /// GROUP BY s.City
-    /// ORDER BY COUNT(*) DESC;
-    /// </summary>
+    
     public IEnumerable<string> Challenge04_CitiesAndActiveEnrollmentCounts()
     {
         return UniversityData.Students.Join(
