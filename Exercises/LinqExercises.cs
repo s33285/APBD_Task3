@@ -23,20 +23,16 @@ public sealed class LinqExercises
             .OrderBy(s => s.LastName).ThenBy(s=>s.FirstName)
             .Select(s => $"{s.IndexNumber} | {s.FirstName} {s.LastName}");
     }
-
-    /// <summary>
-    /// Task:
-    /// Find the first course from the Analytics category.
-    /// If such a course does not exist, return a text message.
-    ///
-    /// SQL:
-    /// SELECT TOP 1 Title, StartDate
-    /// FROM Courses
-    /// WHERE Category = 'Analytics';
-    /// </summary>
+    
     public IEnumerable<string> Task04_FirstAnalyticsCourse()
     {
-        throw NotImplemented(nameof(Task04_FirstAnalyticsCourse));
+        var course = UniversityData.Courses
+            .FirstOrDefault(c=> string.Equals(c.Category, "Analytics", StringComparison.OrdinalIgnoreCase));
+        if (course == null)
+        {
+            return new[] { "No Analytics course found. " };
+        }
+        return new[] { $"{course.Title} | start {course.StartDate} "};
     }
 
     /// <summary>
