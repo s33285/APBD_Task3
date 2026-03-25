@@ -98,18 +98,7 @@ public sealed class LinqExercises
             (e, s) => new {s.FirstName, s.LastName, e.EnrollmentDate})
             .Select(e => $"{e.FirstName} | {e.LastName} | Enrollment date: {e.EnrollmentDate}");
     }
-
-    /// <summary>
-    /// Task:
-    /// Prepare all student-course pairs based on enrollments.
-    /// Use an approach that flattens the data into a single result sequence.
-    ///
-    /// SQL:
-    /// SELECT s.FirstName, s.LastName, c.Title
-    /// FROM Enrollments e
-    /// JOIN Students s ON s.Id = e.StudentId
-    /// JOIN Courses c ON c.Id = e.CourseId;
-    /// </summary>
+    
     public IEnumerable<string> Task12_StudentCoursePairs()
     {
         return UniversityData.Enrollments
@@ -117,20 +106,16 @@ public sealed class LinqExercises
             .Join(UniversityData.Courses, es =>es.e.CourseId, c => c.Id, (es, c) => new {Student = es.s, Course = c })
             .Select(x => $"{x.Student.FirstName} {x.Student.LastName} | {x.Course.Title}");
     }
-
-    /// <summary>
-    /// Task:
-    /// Group enrollments by course and return the course title together with the number of enrollments.
-    ///
-    /// SQL:
-    /// SELECT c.Title, COUNT(*)
-    /// FROM Enrollments e
-    /// JOIN Courses c ON c.Id = e.CourseId
-    /// GROUP BY c.Title;
-    /// </summary>
+    
     public IEnumerable<string> Task13_GroupEnrollmentsByCourse()
     {
-        throw NotImplemented(nameof(Task13_GroupEnrollmentsByCourse));
+        return UniversityData.Enrollments.GroupBy(e => e.CourseId)
+            .Select(g =>
+            {
+                var course = UniversityData.Courses.FirstOrDefault(c => c.Id == g.Key);
+                var title = course?.Title ?? $"CourseId: {g.Key}";
+                return $"{title} | {g.Count()}";
+            });
     }
 
     /// <summary>
