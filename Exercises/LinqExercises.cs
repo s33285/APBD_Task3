@@ -132,8 +132,17 @@ public sealed class LinqExercises
     /// </summary>
     public IEnumerable<string> Task14_AverageGradePerCourse()
     {
-        throw NotImplemented(nameof(Task14_AverageGradePerCourse));
+        return UniversityData.Enrollments
+            .Where(e => e.FinalGrade.HasValue)
+            .GroupBy(e => e.CourseId)
+            .Select(g =>
+            {
+                var course = UniversityData.Courses.First(c => c.Id == g.Key);
+                return $"{course.Title} | {g.Average(e => e.FinalGrade!.Value):F2}";
+            });
     }
+
+    
 
     /// <summary>
     /// Task:
