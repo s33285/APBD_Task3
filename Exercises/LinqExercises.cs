@@ -70,19 +70,11 @@ public sealed class LinqExercises
             count.ToString()
         };
     }
-
-    /// <summary>
-    /// Task:
-    /// Return a sorted list of distinct student cities.
-    ///
-    /// SQL:
-    /// SELECT DISTINCT City
-    /// FROM Students
-    /// ORDER BY City;
-    /// </summary>
+    
     public IEnumerable<string> Task08_DistinctStudentCities()
     {
-        throw NotImplemented(nameof(Task08_DistinctStudentCities));
+        return UniversityData.Students
+            .Select(s => s.City).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(c => c);
     }
 
     /// <summary>
