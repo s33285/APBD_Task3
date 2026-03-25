@@ -82,21 +82,14 @@ public sealed class LinqExercises
         return UniversityData.Enrollments.OrderByDescending(e => e.EnrollmentDate).Take(3)
             .Select(e => $"{e.EnrollmentDate} | student: {e.StudentId} | course: {e.CourseId}");
     }
-
-    /// <summary>
-    /// Task:
-    /// Implement simple pagination for the course list.
-    /// Assume a page size of 2 and return the second page of data.
-    ///
-    /// SQL:
-    /// SELECT Title, Category
-    /// FROM Courses
-    /// ORDER BY Title
-    /// OFFSET 2 ROWS FETCH NEXT 2 ROWS ONLY;
-    /// </summary>
+    
     public IEnumerable<string> Task10_SecondPageOfCourses()
     {
-        throw NotImplemented(nameof(Task10_SecondPageOfCourses));
+        int pageSize = 2;
+        int pageIndex = 1;
+
+        return UniversityData.Courses.OrderBy(c => c.Title).Skip(pageIndex * pageSize).Take(pageSize)
+            .Select(c => $"{c.Title} | {c.Category}");
     }
 
     /// <summary>
