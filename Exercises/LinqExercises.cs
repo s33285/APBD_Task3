@@ -211,7 +211,15 @@ public sealed class LinqExercises
     /// </summary>
     public IEnumerable<string> Challenge04_CitiesAndActiveEnrollmentCounts()
     {
-        throw NotImplemented(nameof(Challenge04_CitiesAndActiveEnrollmentCounts));
+        return UniversityData.Students.Join(
+                UniversityData.Enrollments.Where(e => e.IsActive),
+                s => s.Id,
+                e => e.StudentId,
+                (s, e) => s.City)
+                .GroupBy(city =>city)
+                .Select(g => new{ City = g.Key, Count = g.Count()})
+                .OrderByDescending(a => a.Count)
+                .Select(a => $"{a.City} | {a.Count}");
     }
 
     private static NotImplementedException NotImplemented(string methodName)
