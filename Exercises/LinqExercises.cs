@@ -163,21 +163,20 @@ public sealed class LinqExercises
             });
     }
 
-    /// <summary>
-    /// Challenge:
-    /// List the courses that start in April 2026 and do not have any final grades assigned yet.
-    ///
-    /// SQL:
-    /// SELECT c.Title
-    /// FROM Courses c
-    /// JOIN Enrollments e ON c.Id = e.CourseId
-    /// WHERE MONTH(c.StartDate) = 4 AND YEAR(c.StartDate) = 2026
-    /// GROUP BY c.Title
-    /// HAVING SUM(CASE WHEN e.FinalGrade IS NOT NULL THEN 1 ELSE 0 END) = 0;
-    /// </summary>
+
     public IEnumerable<string> Challenge02_AprilCoursesWithoutFinalGrades()
     {
-        throw NotImplemented(nameof(Challenge02_AprilCoursesWithoutFinalGrades));
+        return UniversityData.Courses
+            .Where(c=>c.StartDate.Month == 4 && c.StartDate.Year ==2026)
+            .Where(c =>
+            {
+                var enrollments = UniversityData.Enrollments
+                    .Where(e => e.CourseId == c.Id)
+                    .ToList();
+                return enrollments.Any() && enrollments.All(e => !e.FinalGrade.HasValue);
+
+            })
+            .Select(c => c.Title);
     }
 
     /// <summary>
