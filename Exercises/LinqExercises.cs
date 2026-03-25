@@ -91,20 +91,12 @@ public sealed class LinqExercises
         return UniversityData.Courses.OrderBy(c => c.Title).Skip(pageIndex * pageSize).Take(pageSize)
             .Select(c => $"{c.Title} | {c.Category}");
     }
-
-    /// <summary>
-    /// Task:
-    /// Join students with enrollments by StudentId.
-    /// Return the full student name and the enrollment date.
-    ///
-    /// SQL:
-    /// SELECT s.FirstName, s.LastName, e.EnrollmentDate
-    /// FROM Students s
-    /// JOIN Enrollments e ON s.Id = e.StudentId;
-    /// </summary>
+    
     public IEnumerable<string> Task11_JoinStudentsWithEnrollments()
     {
-        throw NotImplemented(nameof(Task11_JoinStudentsWithEnrollments));
+        return UniversityData.Enrollments.Join(UniversityData.Students, e => e.StudentId, s => s.Id,
+            (e, s) => new {s.FirstName, s.LastName, e.EnrollmentDate})
+            .Select(e => $"{e.FirstName} | {e.LastName} | Enrollment date: {e.EnrollmentDate}");
     }
 
     /// <summary>
