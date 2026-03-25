@@ -34,19 +34,7 @@ public sealed class LinqExercises
         }
         return new[] { $"{course.Title} | start {course.StartDate} "};
     }
-
-    /// <summary>
-    /// Task:
-    /// Check whether there is at least one inactive enrollment in the data set.
-    /// Return one line with a True/False or Yes/No answer.
-    ///
-    /// SQL:
-    /// SELECT CASE WHEN EXISTS (
-    ///     SELECT 1
-    ///     FROM Enrollments
-    ///     WHERE IsActive = 0
-    /// ) THEN 1 ELSE 0 END;
-    /// </summary>
+    
     public IEnumerable<string> Task05_IsThereAnyInactiveEnrollment()
     {
         var anyInactive = UniversityData.Enrollments.Any(e => !e.IsActive);
@@ -55,20 +43,14 @@ public sealed class LinqExercises
             anyInactive.ToString()
         };
     }
-
-    /// <summary>
-    /// Task:
-    /// Check whether every lecturer has a department assigned.
-    /// Use a method that validates the condition for the whole collection.
-    ///
-    /// SQL:
-    /// SELECT CASE WHEN COUNT(*) = COUNT(Department)
-    /// THEN 1 ELSE 0 END
-    /// FROM Lecturers;
-    /// </summary>
+    
     public IEnumerable<string> Task06_DoAllLecturersHaveDepartment()
     {
-        throw NotImplemented(nameof(Task06_DoAllLecturersHaveDepartment));
+        var assignedDep = UniversityData.Lecturers.All(l => !string.IsNullOrEmpty(l.Department));
+        return new[]
+        {
+            assignedDep.ToString()
+        };
     }
 
     /// <summary>
@@ -82,7 +64,11 @@ public sealed class LinqExercises
     /// </summary>
     public IEnumerable<string> Task07_CountActiveEnrollments()
     {
-        throw NotImplemented(nameof(Task07_CountActiveEnrollments));
+        var count = UniversityData.Enrollments.Count(e => e.IsActive);
+        return new[]
+        {
+            count.ToString()
+        };
     }
 
     /// <summary>
