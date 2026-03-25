@@ -178,23 +178,22 @@ public sealed class LinqExercises
             })
             .Select(c => c.Title);
     }
-
-    /// <summary>
-    /// Challenge:
-    /// Calculate the average final grade for every lecturer across all of their courses.
-    /// Ignore missing grades but still keep the lecturers in mind as the reporting dimension.
-    ///
-    /// SQL:
-    /// SELECT l.FirstName, l.LastName, AVG(e.FinalGrade)
-    /// FROM Lecturers l
-    /// LEFT JOIN Courses c ON c.LecturerId = l.Id
-    /// LEFT JOIN Enrollments e ON e.CourseId = c.Id
-    /// WHERE e.FinalGrade IS NOT NULL
-    /// GROUP BY l.FirstName, l.LastName;
-    /// </summary>
+    
     public IEnumerable<string> Challenge03_LecturersAndAverageGradeAcrossTheirCourses()
     {
-        throw NotImplemented(nameof(Challenge03_LecturersAndAverageGradeAcrossTheirCourses));
+        return UniversityData.Lecturers.Select(les =>
+        {
+            var grade = UniversityData.Courses
+                .Where(c => c.LecturerId == les.Id)
+                .SelectMany(c => UniversityData.Enrollments.Where(e => e.CourseId == c.Id && e.FinalGrade.HasValue)
+                    .Select(e => e.FinalGrade!.Value)).ToList();
+
+            if (grade.Any())
+            {
+                return $"{les.FirstName} {les.LastName} | {grade.Average():F2}";
+            }
+            return $"{les.FirstName} {les.LastName}";
+        });
     }
 
     /// <summary>
