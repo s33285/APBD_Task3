@@ -134,27 +134,20 @@ public sealed class LinqExercises
     {
         return UniversityData.Lecturers.Select(les =>
         {
-
             var count = UniversityData.Courses.Count(c => c.LecturerId == les.Id);
             return $"{les.FirstName} {les.LastName} | {count}";
         });
     }
 
-    /// <summary>
-    /// Task:
-    /// For each student, find the highest final grade.
-    /// Skip students who do not have any graded enrollment yet.
-    ///
-    /// SQL:
-    /// SELECT s.FirstName, s.LastName, MAX(e.FinalGrade)
-    /// FROM Students s
-    /// JOIN Enrollments e ON s.Id = e.StudentId
-    /// WHERE e.FinalGrade IS NOT NULL
-    /// GROUP BY s.FirstName, s.LastName;
-    /// </summary>
     public IEnumerable<string> Task16_HighestGradePerStudent()
     {
-        throw NotImplemented(nameof(Task16_HighestGradePerStudent));
+        return UniversityData.Enrollments.Where(e => e.FinalGrade.HasValue)
+            .GroupBy(e => e.StudentId).Select(g =>
+            {
+                var student = UniversityData.Students.First(s => s.Id == g.Key);
+                var maxGrade = g.Max(e => e.FinalGrade.Value);
+                return $"{student.FirstName} {student.LastName} | {maxGrade}";
+            });
     }
 
     /// <summary>
